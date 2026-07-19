@@ -1,8 +1,20 @@
-rule_id,rule_name,category,description,status,date_added
-R001,Profit Sharing,financial,50% of annual profits distributed to members,active,2024-01-01
-R002,Consensus Voting,governance,Major decisions require 75% member approval,active,2024-01-01
-R003,Minimum Order,operations,Minimum order value is Rs 5000,active,2024-01-01
-R004,Quality Check,production,Every batch must pass quality inspection,active,2024-01-01
-R005,Member Training,hr,New members must complete 2 week training,active,2024-01-01
-R006,Payment Terms,financial,30 day net payment terms for bulk buyers,active,2024-01-01
-R007,Discount Policy,sales,5% discount for orders above Rs 10000,active,2024-01-01
+rule_id,rule_name,category,description,status,date_added,enforcement_level,R001,Profit Sharing,financial,50% of annual profits distributed to members,active,2024-01-01,mandatory
+R002,Consensus Voting,governance,Major decisions require 75% member approval,active,2024-01-01,mandatory
+R003,Minimum Order,operations,Minimum order value is Rs 5000,active,2024-01-01,mandatory
+R004,Quality Check,production,Every batch must pass quality inspection,active,2024-01-01,mandatory
+R005,Member Training,hr,New members must complete 2 week training,active,2024-01-01,mandatory
+R006,Payment Terms,financial,30 day net payment terms for bulk buyers,active,2024-01-01,mandatory
+R007,Discount Policy,sales,5% discount for orders above Rs 10000,active,2024-01-01,recommended
+R008,Zero Waste Policy,operations,All production waste must be recycled or reused,active,2024-03-15,mandatory
+R009,Minimum Wage,hr,All members paid minimum wage of Rs 500/day,active,2024-03-15,mandatory
+R010,Attendance Policy,hr,Minimum 75% attendance required for bonuses,active,2024-03-15,mandatory
+R011,Safety Policy,operations,Safety protocols must be followed in workshop,active,2024-04-01,mandatory
+R012,Transparency,governance,Financial reports shared monthly with all members,active,2024-04-01,mandatory
+R013,Bulk Discount,sales,10% discount for orders above Rs 25000,active,2024-05-01,recommended
+R014,Sustainable Sourcing,operations,Use eco-friendly raw materials when possible,active,2024-05-01,recommended
+R015,Royalty Policy,financial,Designers get 5% royalty on their designs,active,2024-06-01,mandatory
+R016,Delivery Terms,logistics,Free delivery for orders above Rs 10000,active,2024-06-01,recommended
+R017,Return Policy,sales,Returns accepted within 7 days of delivery,active,2024-07-01,mandatory
+R018,Quality Standards,production,Products must meet ISO quality standards,active,2024-07-01,mandatory
+R019,Team Leadership,hr,Each team must have designated leader,active,2024-07-15,mandatory
+R020,Profit Reinvestment,financial,Minimum 25% profit reinvested in cooperative,active,2024-07-15,mandatory

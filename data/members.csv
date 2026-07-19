@@ -1,9 +1,21 @@
-member_id,name,role,skills,availability,status,join_date
-001,Rajesh Kumar,Master Weaver,weaving,saree,available,2020-01-15
-002,Sita Patel,Artisan,embroidery,embroidery,available,2021-03-20
-003,Amit Singh,Finisher,finishing,finishing,on_leave,2022-06-10
-004,Meena Gupta,Supervisor,management,quality_check,available,2020-08-01
-005,Vikram Rao,Technician,machine_operation,machine,available,2023-02-15
-006,Sunita Devi,Assistant,packaging,packing,available,2023-05-10
-007,John Abraham,Driver,logistics,delivery,available,2023-07-01
-008,Priya Sharma,Admin,administration,data_entry,available,2024-01-15
+member_id,name,role,skills,availability,status,join_date,contact,shift
+001,Rajesh Kumar,Master Weaver,weaving design saree,all_day,available,2020-01-15,9876543210,Morning
+002,Sita Patel,Master Weaver,embroidery weaving,all_day,available,2021-03-20,9876543211,Morning
+003,Amit Singh,Senior Weaver,weaving finishing,all_day,on_leave,2022-06-10,9876543212,Evening
+004,Meena Gupta,Supervisor,management quality_check,all_day,available,2020-08-01,9876543213,Morning
+005,Vikram Rao,Master Weaver,machine_operation design,all_day,available,2023-02-15,9876543214,Morning
+006,Sunita Devi,Junior Weaver,packaging weaving,all_day,available,2023-05-10,9876543215,Evening
+007,John Abraham,Logistics Head,delivery transport,all_day,available,2023-07-01,9876543216,Morning
+008,Priya Sharma,Admin,administration data_entry,all_day,available,2024-01-15,9876543217,Morning
+009,Deepak Kumar,Designer,design embroidery,all_day,available,2024-03-01,9876543218,Evening
+010,Anita Reddy,Quality Controller,quality_check inspection,all_day,available,2024-05-15,9876543219,Morning
+011,Suresh Kumar,Driver,delivery transport,all_day,available,2024-06-01,9876543220,Evening
+012,Lakshmi Nair,Junior Weaver,weaving packing,part_time,available,2024-07-01,9876543221,Evening
+013,Mohan Singh,Senior Weaver,finishing packaging,full_day,on_leave,2023-08-15,9876543222,Morning
+014,Kavita Sharma,Designer,design printing,full_day,available,2024-09-01,9876543223,Morning
+015,Ravi Kumar,Accountant,finance accounting,full_day,available,2024-10-01,9876543224,Morning
+016,Pooja Patel,Junior Weaver,weaving cutting,part_time,available,2024-11-15,9876543225,Evening
+017,Arjun Singh,Supervisor,management,full_day,available,2024-12-01,9876543226,Morning
+018,Sneha Reddy,Quality Controller,inspection,full_day,available,2025-01-15,9876543227,Morning
+019,Vijay Kumar,Driver,delivery,full_day,available,2025-02-01,9876543228,Evening
+020,Neha Gupta,Admin,data_entry,full_day,available,2025-03-15,9876543229,Morning

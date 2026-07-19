@@ -1,11 +1,63 @@
 date,type,amount,category,description
-2026-07-01,income,5000,sales,Weekly sales revenue
-2026-07-02,expense,1200,raw_materials,Raw material purchase
-2026-07-03,expense,800,utilities,Electricity and water
-2026-07-04,income,3000,sales,Bulk order #101
-2026-07-05,expense,200,transport,Delivery to city
-2026-07-06,income,4500,sales,Order #102
-2026-07-07,expense,900,raw_materials,Additional materials
-2026-07-08,expense,400,maintenance,Equipment repair
-2026-07-09,income,6000,sales,Bulk order #103
-2026-07-10,expense,1500,salaries,Monthly staff payment
+2026-01-01,income,25000,sales,New year bulk order from City Traders
+2026-01-05,expense,5000,raw_materials,Cotton purchase from Supplier A
+2026-01-08,expense,3000,utilities,Electricity bill
+2026-01-10,income,18000,sales,Order from Local Boutique
+2026-01-12,expense,2000,transport,Delivery to City Traders
+2026-01-15,expense,4000,salaries,Monthly staff payment
+2026-01-20,income,32000,sales,Bulk order from Eco Store
+2026-01-25,expense,6000,raw_materials,Dye and thread purchase
+2026-01-28,expense,1500,maintenance,Equipment repair
+2026-02-01,income,22000,sales,Export Corp order
+2026-02-05,expense,4500,raw_materials,Raw material restock
+2026-02-08,expense,2500,utilities,Water and electricity
+2026-02-10,income,28000,sales,City Distributors bulk order
+2026-02-12,expense,1800,transport,Delivery to Export Corp
+2026-02-15,expense,4000,salaries,February staff payment
+2026-02-20,income,15000,sales,Local shop order
+2026-02-25,expense,7000,raw_materials,Massive material order
+2026-02-28,expense,2000,maintenance,Machine servicing
+2026-03-01,income,35000,sales,Government school uniform order
+2026-03-05,expense,8000,raw_materials,Bulk cotton purchase
+2026-03-08,expense,3000,utilities,Monthly utilities
+2026-03-10,income,42000,sales,International buyer order
+2026-03-12,expense,3000,transport,Shipping to international buyer
+2026-03-15,expense,5000,salaries,March staff payment
+2026-03-20,income,19000,sales,Wholesale market order
+2026-03-25,expense,2500,maintenance,New sewing machines
+2026-03-28,income,27000,sales,Eco Store repeat order
+2026-04-01,income,45000,sales,Holiday season bulk order
+2026-04-05,expense,3500,raw_materials,Special fabric purchase
+2026-04-08,expense,3000,utilities,April utilities
+2026-04-10,income,38000,sales,Export Corp big order
+2026-04-12,expense,4000,transport,Multiple deliveries
+2026-04-15,expense,6000,salaries,April staff payment
+2026-04-20,income,22000,sales,Local boutique repeat order
+2026-04-25,expense,1800,maintenance,Equipment upgrade
+2026-04-28,income,31000,sales,City Traders new contract
+2026-05-01,income,50000,sales,Mega order from Corporation
+2026-05-05,expense,12000,raw_materials,Large raw material purchase
+2026-05-08,expense,3500,utilities,May utilities
+2026-05-10,income,29000,sales,School uniform additional order
+2026-05-12,expense,5000,transport,Heavy delivery month
+2026-05-15,expense,7000,salaries,May staff payment with bonus
+2026-05-20,income,33000,sales,Eco Store expansion order
+2026-05-25,expense,2000,maintenance,Premises maintenance
+2026-05-28,income,16000,sales,Local wholesaler order
+2026-06-01,income,48000,sales,Mid-year large contract
+2026-06-05,expense,10000,raw_materials,Bulk thread and dye
+2026-06-08,expense,3000,utilities,June utilities
+2026-06-10,income,36000,sales,City distributor repeat order
+2026-06-12,expense,3000,transport,Delivery to multiple locations
+2026-06-15,expense,6000,salaries,June staff payment
+2026-06-20,income,20000,sales,New client from nearby city
+2026-06-25,expense,2500,maintenance,AC repair for workshop
+2026-06-28,income,41000,sales,Export Corp regular order
+2026-07-01,income,30000,sales,July opening order
+2026-07-05,expense,5000,raw_materials,Raw material for new design
+2026-07-08,expense,2500,utilities,July utilities
+2026-07-10,income,26000,sales,Local school order
+2026-07-12,expense,2000,transport,Domestic deliveries
+2026-07-15,expense,6000,salaries,July staff payment
+2026-07-16,income,55000,sales,Biggest single order ever!
+2026-07-18,expense,15000,raw_materials,Premium raw material for special order

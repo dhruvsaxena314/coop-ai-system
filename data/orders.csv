@@ -1,6 +1,26 @@
-order_id,customer,items,quantity,total_value,status,deadline,delivery_address
-101,City Traders,Saree,50,6000,pending,2026-07-25,123 Main St, City
-102,Local Boutique,Kurta,30,7500,completed,2026-07-20,456 Market Rd
-103,Bulk Distributor,Saree,100,12000,processing,2026-08-01,789 Industrial Area
-104,Eco Store,Kurta,25,6250,pending,2026-07-28,345 Green Lane
-105,Export Corp,Saree,200,24000,proposed,2026-08-15,567 Export Zone
+order_id,customer,items,quantity,total_value,status,deadline,delivery_address,payment_status,order_date
+101,City Traders,Saree Classic,50,6000,pending,2026-07-25,123 Main St, City,paid,2026-07-10
+102,Local Boutique,Kurti,30,5400,completed,2026-07-20,456 Market Rd, paid,2026-07-05
+103,Bulk Distributor,Saree Premium,100,25000,processing,2026-08-01,789 Industrial Area,partial,2026-07-12
+104,Eco Store,Kurta,25,6250,pending,2026-07-28,345 Green Lane,unpaid,2026-07-15
+105,Export Corp,Saree Designer,200,80000,proposed,2026-08-15,567 Export Zone,unpaid,2026-07-01
+106,School Board,Uniform Set,500,120000,processing,2026-08-20,School Board Office,partial,2026-06-15
+107,City Traders,Kurti,40,7200,completed,2026-07-15,123 Main St, City,paid,2026-07-02
+108,Wholesale Market,Saree Classic,75,9000,pending,2026-08-05,Wholesale Market Complex,unpaid,2026-07-18
+109,Eco Store,Dupatta,100,8000,completed,2026-07-22,345 Green Lane,paid,2026-07-08
+110,International Buyer,Saree Premium,50,12500,processing,2026-08-25,International Shipping,partial,2026-06-25
+111,Local Boutique,Kurta,15,3750,pending,2026-07-30,456 Market Rd,unpaid,2026-07-20
+112,Government Office,Uniform Set,200,48000,proposed,2026-09-01,Government Office Complex,unpaid,2026-07-01
+113,Export Corp,Kurti,60,10800,processing,2026-08-10,567 Export Zone,paid,2026-07-05
+114,City Traders,Dupatta,150,12000,pending,2026-08-12,123 Main St, City,partial,2026-07-15
+115,Eco Store,Saree Designer,30,12000,completed,2026-07-18,345 Green Lane,paid,2026-07-03
+116,Bulk Distributor,Kurta,80,20000,processing,2026-08-18,789 Industrial Area,unpaid,2026-07-10
+117,School Board,Kurti,100,18000,pending,2026-08-22,School Board Office,unpaid,2026-07-12
+118,Wholesale Market,Saree Premium,60,15000,processing,2026-08-08,Wholesale Market Complex,partial,2026-07-14
+119,International Buyer,Uniform Set,150,36000,proposed,2026-09-15,International Shipping,unpaid,2026-07-01
+120,Local Boutique,Dupatta,80,6400,pending,2026-08-02,456 Market Rd,unpaid,2026-07-19
+121,Eco Store,Saree Classic,40,4800,completed,2026-07-21,345 Green Lane,paid,2026-07-06
+122,Export Corp,Saree Designer,100,40000,processing,2026-08-28,567 Export Zone,partial,2026-07-08
+123,City Traders,Kurta,35,8750,pending,2026-08-15,123 Main St, City,unpaid,2026-07-16
+124,Government Office,Kurti,150,27000,proposed,2026-09-05,Government Office Complex,unpaid,2026-07-01
+125,Bulk Distributor,Saree Premium,80,20000,processing,2026-08-20,789 Industrial Area,partial,2026-07-13
