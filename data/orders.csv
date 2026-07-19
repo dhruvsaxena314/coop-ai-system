@@ -1,0 +1,6 @@
+order_id,customer,items,quantity,total_value,status,deadline,delivery_address
+101,City Traders,Saree,50,6000,pending,2026-07-25,123 Main St, City
+102,Local Boutique,Kurta,30,7500,completed,2026-07-20,456 Market Rd
+103,Bulk Distributor,Saree,100,12000,processing,2026-08-01,789 Industrial Area
+104,Eco Store,Kurta,25,6250,pending,2026-07-28,345 Green Lane
+105,Export Corp,Saree,200,24000,proposed,2026-08-15,567 Export Zone

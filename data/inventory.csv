@@ -1,0 +1,9 @@
+item_id,item_name,category,quantity,unit_price,reorder_level,last_order_date
+001,Raw Cotton,raw_material,500,kg,2.50,200,2026-06-15
+002,Dye Blue,material,50,l,5.00,20,2026-06-20
+003,Fabric Roll,product,200,meters,10.00,50,2026-07-01
+004,Finished Saree,product,75,pieces,120.00,20,2026-07-05
+005,Thread,raw_material,1000,spools,0.50,500,2026-06-25
+006,Packaging Box,packaging,300,pieces,1.00,100,2026-07-02
+007,Buttons,material,5000,pieces,0.10,1000,2026-06-30
+008,Finished Kurta,product,45,pieces,250.00,10,2026-07-08

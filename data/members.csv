@@ -1,0 +1,9 @@
+member_id,name,role,skills,availability,status,join_date
+001,Rajesh Kumar,Master Weaver,weaving,saree,available,2020-01-15
+002,Sita Patel,Artisan,embroidery,embroidery,available,2021-03-20
+003,Amit Singh,Finisher,finishing,finishing,on_leave,2022-06-10
+004,Meena Gupta,Supervisor,management,quality_check,available,2020-08-01
+005,Vikram Rao,Technician,machine_operation,machine,available,2023-02-15
+006,Sunita Devi,Assistant,packaging,packing,available,2023-05-10
+007,John Abraham,Driver,logistics,delivery,available,2023-07-01
+008,Priya Sharma,Admin,administration,data_entry,available,2024-01-15

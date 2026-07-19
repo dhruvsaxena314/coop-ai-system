@@ -1,0 +1,58 @@
+{
+  "local": [
+    {
+      "name": "Shop and Establishment Act",
+      "category": "labor",
+      "jurisdiction": "all",
+      "requirement": "Registration mandatory for all shops",
+      "status": "active",
+      "last_updated": "2024-01-01",
+      "source": "govt"
+    }
+  ],
+  "national": [
+    {
+      "name": "MSME Registration",
+      "category": "business",
+      "requirement": "All co-ops must register as MSME",
+      "status": "active",
+      "last_updated": "2024-01-01",
+      "source": "govt"
+    },
+    {
+      "name": "GST Compliance",
+      "category": "tax",
+      "requirement": "Monthly GST filing required",
+      "status": "active",
+      "last_updated": "2024-01-01",
+      "source": "govt"
+    },
+    {
+      "name": "Consumer Protection Act",
+      "category": "consumer",
+      "requirement": "Product quality standards apply",
+      "status": "active",
+      "last_updated": "2024-01-01",
+      "source": "govt"
+    }
+  ],
+  "food": [
+    {
+      "name": "FSSAI License",
+      "category": "food_safety",
+      "requirement": "All food producers must have FSSAI license",
+      "status": "active",
+      "last_updated": "2024-01-01",
+      "source": "fssai"
+    },
+    {
+      "name": "Food Safety Standards",
+      "category": "food_safety",
+      "requirement": "Products must meet FSSAI quality standards",
+      "status": "active",
+      "last_updated": "2024-01-01",
+      "source": "fssai"
+    }
+  ],
+  "last_updated": "2026-07-18T00:00:00"
+}

@@ -1,0 +1,11 @@
+date,type,amount,category,description
+2026-07-01,income,5000,sales,Weekly sales revenue
+2026-07-02,expense,1200,raw_materials,Raw material purchase
+2026-07-03,expense,800,utilities,Electricity and water
+2026-07-04,income,3000,sales,Bulk order #101
+2026-07-05,expense,200,transport,Delivery to city
+2026-07-06,income,4500,sales,Order #102
+2026-07-07,expense,900,raw_materials,Additional materials
+2026-07-08,expense,400,maintenance,Equipment repair
+2026-07-09,income,6000,sales,Bulk order #103
+2026-07-10,expense,1500,salaries,Monthly staff payment

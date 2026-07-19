@@ -1,0 +1,8 @@
+rule_id,rule_name,category,description,status,date_added
+R001,Profit Sharing,financial,50% of annual profits distributed to members,active,2024-01-01
+R002,Consensus Voting,governance,Major decisions require 75% member approval,active,2024-01-01
+R003,Minimum Order,operations,Minimum order value is Rs 5000,active,2024-01-01
+R004,Quality Check,production,Every batch must pass quality inspection,active,2024-01-01
+R005,Member Training,hr,New members must complete 2 week training,active,2024-01-01
+R006,Payment Terms,financial,30 day net payment terms for bulk buyers,active,2024-01-01
+R007,Discount Policy,sales,5% discount for orders above Rs 10000,active,2024-01-01
