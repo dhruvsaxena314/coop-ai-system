@@ -5,9 +5,15 @@ from agents.logistics_agent import LogisticsAgent
 from agents.compliance_agent import ComplianceAgent
 from agents.company_rules_agent import CompanyRulesAgent
 from agents.govt_agent import GovtAgent
+from agents.external_agent import ExternalAgent
+from agents.govt_policy_agent import GovtPolicyAgent
+from agents.decision_engine import DecisionEngine
+from agents.ai_agent import FlexibleAIAgent
+from agents.analysis_agent import AnalysisAgent
 
 class Orchestrator:
     def __init__(self):
+        # Internal agents
         self.finance = FinanceAgent()
         self.inventory = InventoryAgent()
         self.hr = HRAgent()
@@ -15,8 +21,60 @@ class Orchestrator:
         self.compliance = ComplianceAgent()
         self.rules = CompanyRulesAgent()
         self.govt = GovtAgent()
-
+        
+        # External agents
+        self.external = ExternalAgent()
+        self.policy = GovtPolicyAgent()
+        
+        # Decision engine
+        self.decision = DecisionEngine()
+        
+        # AI agents
+        self.ai_agent = FlexibleAIAgent()
+        self.analysis = AnalysisAgent()
+    
     def analyze_query(self, query):
+        """Main orchestration method"""
+        # Step 1: Gather all data
+        context = self._gather_context()
+        
+        # Step 2: Analyze with agents
+        agent_results = self._run_agents(query, context)
+        
+        # Step 3: Decision engine evaluation
+        decision = self._evaluate_decision(query, context)
+        
+        # Step 4: AI synthesis
+        synthesis = self._synthesize(query, context, agent_results, decision)
+        
+        return {
+            "context": context,
+            "agents": agent_results,
+            "decision": decision,
+            "synthesis": synthesis
+        }
+    
+    def _gather_context(self):
+        """Gather all data into a single context"""
+        finance = self.finance.get_summary()
+        inventory = self.inventory.get_summary()
+        members = self.hr.get_summary()
+        orders = self.analysis.get_order_summary()
+        external = self.external.get_all()
+        policies = self.policy.get_active_policies()
+        
+        return {
+            "finance": finance,
+            "inventory": inventory,
+            "members": members,
+            "orders": orders,
+            "external": external,
+            "policies": policies,
+            "timestamp": pd.Timestamp.now().isoformat()
+        }
+    
+    def _run_agents(self, query, context):
+        """Run all agents and collect results"""
         agents = [
             self.finance.analyze(query),
             self.inventory.analyze(query),
@@ -24,79 +82,69 @@ class Orchestrator:
             self.logistics.analyze(query),
             self.compliance.analyze(query),
             self.rules.analyze(query),
-            self.govt.analyze(query)
+            self.govt.analyze(query),
+            self.policy.analyze(query)
         ]
-
-        risk_keywords = ["warning", "shortfall", "not available", "expires", "ban"]
-        risk_count = 0
-        for agent in agents:
-            finding = agent["finding"].lower()
-            if any(kw in finding for kw in risk_keywords):
-                risk_count += 1
-
-        if risk_count >= 3:
-            recommendation = "High risk detected. Recommend review before proceeding."
-            risk_level = "High"
-            confidence = 0.8
-        elif risk_count >= 1:
-            recommendation = "Some risks identified. Proceed with caution."
-            risk_level = "Medium"
-            confidence = 0.9
-        else:
-            recommendation = "No significant risks. Proceed with the plan."
-            risk_level = "Low"
-            confidence = 0.95
-
+        return agents
+    
+    def _evaluate_decision(self, query, context):
+        """Use decision engine"""
+        # Compute risk
+        risk = DecisionEngine.compute_risk_score(context)
+        
+        # Evaluate order if relevant
+        order_eval = None
+        if 'order' in query.lower() or 'accept' in query.lower():
+            order_eval = DecisionEngine.evaluate_order({}, context)
+        
         return {
-            "agents": agents,
-            "recommendation": recommendation,
-            "risk_level": risk_level,
-            "risk_count": risk_count,
-            "confidence": confidence
+            "risk_score": risk,
+            "risk_level": "High" if risk > 0.7 else "Medium" if risk > 0.4 else "Low",
+            "order_evaluation": order_eval,
+            "recommendation": "Proceed" if risk < 0.5 else "Review" if risk < 0.7 else "Reconsider"
         }
-
-    def analyze_order(self, order_data):
-        finance_check = self.finance.can_afford(order_data.get("total_cost", 0))
-        inventory_check = self.inventory.check_availability(
-            order_data.get("item_name", ""),
-            order_data.get("quantity", 0)
-        )
-        hr_check = self.hr.check_capacity(
-            order_data.get("task_type", ""),
-            order_data.get("skill", "")
-        )
-        logistics_check = self.logistics.estimate_delivery(
-            order_data.get("destination", ""),
-            order_data.get("weight", 0)
-        )
-        compliance_check = self.compliance.check_compliance(
-            order_data.get("order_type", ""),
-            order_data.get("location", "")
-        )
-        rules_check = self.rules.check_rule(
-            order_data.get("action", ""),
-            order_data.get("category", "")
-        )
-        govt_check = self.govt.check_ban(
-            order_data.get("product", ""),
-            order_data.get("location", "")
-        )
-
-        can_proceed = all([
-            finance_check["can_afford"],
-            inventory_check["available"],
-            hr_check["has_capacity"],
-            rules_check["allowed"],
-            not govt_check["has_bans"]
-        ])
-
+    
+    def _synthesize(self, query, context, agent_results, decision):
+        """Synthesize everything into final response"""
+        # Build context string for AI
+        context_str = self._build_context_string(context)
+        
+        # Get AI response
+        ai_response = self.ai_agent.chat(query, context_str)
+        
         return {
-            "can_proceed": can_proceed,
-            "finance": finance_check,
-            "inventory": inventory_check,
-            "hr": hr_check,
-            "logistics": logistics_check,
-            "compliance": compliance_check,
-            "rules": rules_check,
-            "govt": govt_check
+            "response": ai_response,
+            "risk": decision.get("risk_level"),
+            "recommendation": decision.get("recommendation")
         }
+    
+    def _build_context_string(self, context):
+        """Build context string for AI"""
+        lines = []
+        
+        finance = context.get('finance')
+        if finance:
+            lines.append(f"FINANCES: Income Rs {finance.get('income', 0):,.0f}, Expenses Rs {finance.get('expenses', 0):,.0f}, Profit Rs {finance.get('profit', 0):,.0f}")
+        
+        inventory = context.get('inventory')
+        if inventory:
+            lines.append(f"INVENTORY: {inventory.get('total_items', 0)} items, low stock: {len(inventory.get('low_stock_items', []))}")
+        
+        members = context.get('members')
+        if members:
+            lines.append(f"MEMBERS: {members.get('available', 0)} of {members.get('total', 0)} available")
+        
+        external = context.get('external', {})
+        if external.get('cotton'):
+            lines.append(f"COTTON PRICE: ${external['cotton']}")
+        if external.get('exchange'):
+            lines.append(f"USD/INR: {external['exchange']}")
+        if external.get('weather'):
+            w = external['weather'][0]
+            lines.append(f"WEATHER: {w['weather'][0]['description']}, {w['main']['temp']}°C")
+        
+        policies = context.get('policies', [])
+        if policies:
+            lines.append(f"GOVT POLICIES: {len(policies)} active")
+        
+        return "\n".join(lines)

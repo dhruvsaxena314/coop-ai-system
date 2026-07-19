@@ -1,0 +1,49 @@
+{
+  "policies": [
+    {
+      "name": "MSME Interest Subvention 2024",
+      "category": "financial",
+      "description": "5% interest subvention for MSMEs including cooperatives",
+      "effective": "2024-06-01",
+      "status": "active",
+      "impact_score": 4,
+      "action_required": "Apply through bank"
+    },
+    {
+      "name": "FSSAI New Packaging Rules",
+      "category": "compliance",
+      "description": "Mandatory QR codes on all food packaging",
+      "effective": "2024-08-01",
+      "status": "active",
+      "impact_score": 3,
+      "action_required": "Update packaging"
+    },
+    {
+      "name": "Cooperative Societies Amendment Act",
+      "category": "governance",
+      "description": "New provisions for cooperative governance and transparency",
+      "effective": "2024-03-15",
+      "status": "active",
+      "impact_score": 5,
+      "action_required": "Review governance structure"
+    },
+    {
+      "name": "Textile Export Incentive",
+      "category": "financial",
+      "description": "2% incentive on textile exports",
+      "effective": "2024-07-01",
+      "status": "active",
+      "impact_score": 4,
+      "action_required": "Register for export incentive"
+    },
+    {
+      "name": "GST E-Invoicing Mandate",
+      "category": "compliance",
+      "description": "Mandatory e-invoicing for transactions above Rs 5 lakh",
+      "effective": "2024-08-01",
+      "status": "active",
+      "impact_score": 3,
+      "action_required": "Set up e-invoicing system"
+    }
+  ]
+}
