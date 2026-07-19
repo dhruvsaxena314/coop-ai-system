@@ -131,7 +131,7 @@ with st.sidebar:
 
     st.markdown("---")
 
-    # Status display
+    # Status display - GROQ ONLY
     st.markdown("<h4 style='color:#ffffff;'>Status</h4>", unsafe_allow_html=True)
     status = ai_agent.get_status()
 
@@ -141,16 +141,16 @@ with st.sidebar:
         Mode: <span style='color:#ffffff;'>{status['mode'].upper()}</span><br>
         Ollama: {'🟢 Running' if status['ollama_available'] else '🔴 Not running'}<br>
         Local Model: <span style='color:#ffffff;'>{status['local_model']}</span><br>
-        OpenRouter: {'✅ Configured' if status['openrouter'] else '❌ Not configured'}<br>
-        Web Model: <span style='color:#ffffff;'>{status['openrouter_model']}</span>
+        Groq: {'✅ Configured' if status['groq'] else '❌ Not configured'}<br>
+        Groq Model: <span style='color:#ffffff;'>{status['groq_model']}</span>
         </p>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("<div class='main-header'>⚙️ Co-operative AI Management System</div>", unsafe_allow_html=True)
 
-# Tabs (All 4 features)
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Decision Analysis", "💬 AI Chat", "📈 Dashboard", "🔗 Knowledge Graph"])
+# Tabs (3 tabs - Knowledge Graph disabled temporarily)
+tab1, tab2, tab3 = st.tabs(["📊 Decision Analysis", "💬 AI Chat", "📈 Dashboard"])
 
 # ==================== TAB 1: Decision Analysis ====================
 with tab1:
@@ -266,54 +266,6 @@ with tab3:
     except Exception as e:
         st.error(f"Error loading dashboard: {str(e)}")
         st.info("Make sure all CSV files exist in the data/ folder.")
-
-# ==================== TAB 4: Knowledge Graph ====================
-# In the knowledge graph tab:
-with tab4:
-    st.markdown("<h3 style='color:#ffffff;'>🔗 Knowledge Graph</h3>", unsafe_allow_html=True)
-
-    # Graph stats
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Nodes", len(kg.graph.nodes))
-    col2.metric("Edges", len(kg.graph.edges))
-
-    # Show graph data as JSON (simpler, always works)
-    graph_data = kg.get_graph_data()
-    
-    if graph_data['nodes']:
-        st.write(f"**Nodes:** {len(graph_data['nodes'])}")
-        st.write(f"**Edges:** {len(graph_data['edges'])}")
-        
-        # Show nodes table
-        nodes_df = pd.DataFrame(graph_data['nodes'])
-        st.dataframe(nodes_df, use_container_width=True)
-        
-        # Node type filter
-        if nodes_df['type'].nunique() > 0:
-            node_types = ['All'] + sorted(nodes_df['type'].unique().tolist())
-            selected_type = st.selectbox("Filter by type", node_types)
-            if selected_type != "All":
-                filtered = nodes_df[nodes_df['type'] == selected_type]
-                st.write(f"**Nodes of type '{selected_type}':** {len(filtered)}")
-                st.dataframe(filtered, use_container_width=True)
-    else:
-        st.info("No data available for knowledge graph.")
-
-    # Node type filter
-    node_types = []
-    if kg.graph and kg.graph.nodes:
-        try:
-            node_types = list(set(nx.get_node_attributes(kg.graph, 'type').values()))
-        except:
-            pass
-
-    if node_types:
-        selected_type = st.selectbox("Filter by type", ["All"] + node_types)
-        if selected_type != "All":
-            filtered_nodes = [n for n, d in kg.graph.nodes(data=True) if d.get('type') == selected_type]
-            st.write(f"**Nodes of type '{selected_type}':** {len(filtered_nodes)}")
-            if filtered_nodes:
-                st.write(filtered_nodes[:10])
 
 st.markdown("---")
 st.markdown("<p style='color: #444444; font-size: 0.7rem; text-align: center;'>⚙️ AI Management System for Cooperatives and Cottage Industries</p>", unsafe_allow_html=True)
