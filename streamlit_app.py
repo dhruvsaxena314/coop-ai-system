@@ -10,7 +10,7 @@ from visualizer import Visualizer
 
 st.set_page_config(page_title="Co-op AI", page_icon="", layout="wide")
 
-# Professional dark theme – no extra fluff
+# Professional dark theme
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Mono&display=swap');
@@ -36,7 +36,7 @@ ai_agent = FlexibleAIAgent()
 analysis_agent = AnalysisAgent()
 kg = KnowledgeGraphAgent()
 
-# Sidebar – minimal
+# Sidebar
 with st.sidebar:
     st.markdown("<div style='font-size:1.2rem; color:#fff;'>⚙ Config</div>", unsafe_allow_html=True)
     mode_options = ['local', 'web', 'hybrid']
@@ -90,17 +90,14 @@ with tabs[0]:
             ai_answer = ai_agent.chat(query, analysis['context'])
             
             st.markdown("---")
-            # Final decision (brief)
             st.markdown(f"<div style='background:#1a1f2a; padding:1.2rem; border-radius:6px; border-left:4px solid #4a9eff;'>"
                         f"<span style='color:#fff; font-size:1.1rem;'>{ai_answer}</span></div>", unsafe_allow_html=True)
             
-            # Chain of Thought
             if analysis.get('cot'):
                 st.markdown("<div style='margin-top:1rem; font-size:0.9rem; color:#aaa;'>Reasoning</div>", unsafe_allow_html=True)
                 for step in analysis['cot']:
                     st.markdown(f"<div class='cot-box'>→ {step}</div>", unsafe_allow_html=True)
             
-            # Insights + references
             if analysis['insights']:
                 st.markdown("<div style='margin-top:1rem; font-size:0.9rem; color:#aaa;'>Data insights</div>", unsafe_allow_html=True)
                 for ins in analysis['insights']:
@@ -168,16 +165,34 @@ with tabs[3]:
     st.markdown("<p style='color:#888;'>Entity relationships in your cooperative</p>", unsafe_allow_html=True)
     col1, col2 = st.columns([3, 1])
     with col1:
-        if kg._built and len(kg.graph.nodes) > 0:
-            net = kg.visualize()
-            if net:
-                net.show("kg.html")
-                with open("kg.html", "r", encoding="utf-8") as f:
-                    st.components.v1.html(f.read(), height=500)
+        try:
+            if kg._built and len(kg.graph.nodes) > 0:
+                net = kg.visualize()
+                if net:
+                    # Attempt to render interactive graph – fallback if fails
+                    try:
+                        net.show("kg.html")
+                        with open("kg.html", "r", encoding="utf-8") as f:
+                            st.components.v1.html(f.read(), height=500)
+                    except Exception as e:
+                        # Fallback: show node/edge lists
+                        st.warning("Interactive graph unavailable, displaying data instead.")
+                        st.write(f"**Nodes ({len(kg.graph.nodes)})**: {list(kg.graph.nodes)[:20]}")
+                        if len(kg.graph.nodes) > 20:
+                            st.write("... and more")
+                        st.write(f"**Edges ({len(kg.graph.edges)})**: {list(kg.graph.edges)[:20]}")
+                        if len(kg.graph.edges) > 20:
+                            st.write("... and more")
+                else:
+                    st.info("Graph is empty.")
             else:
-                st.info("Graph is empty – add more data.")
-        else:
-            st.info("Build graph from CSV data (check data files).")
+                st.info("No graph data available. Check CSV files.")
+        except Exception as e:
+            st.error(f"Graph error: {e}")
+            # Ultimate fallback
+            if kg._built:
+                st.write(f"Nodes: {len(kg.graph.nodes)}")
+                st.write(f"Edges: {len(kg.graph.edges)}")
     with col2:
         st.markdown("### Query")
         node = st.text_input("Node name")
