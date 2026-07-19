@@ -47,7 +47,7 @@ class FlexibleAIAgent:
             "model": self.groq_model,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0.7,
-            "max_tokens": 500
+            "max_tokens": 800
         }
         
         try:
@@ -63,16 +63,48 @@ class FlexibleAIAgent:
         except:
             return None
     
-    def chat(self, message):
-        prompt = f"""
-        You are an AI assistant for a cooperative business.
-        Answer the following question based on your knowledge.
+    def chat(self, message, data_context=None):
+        """
+        Main chat method with optional data context.
         
-        Question: {message}
-        
-        Keep answers concise and actionable.
+        Args:
+            message: User's question
+            data_context: Company data summary from AnalysisAgent
         """
         
+        # Build prompt with data context if provided
+        if data_context:
+            prompt = f"""
+You are an AI Decision Intelligence System for a cooperative business.
+You have access to REAL company data. Use it to make decisions.
+
+COMPANY DATA:
+{data_context}
+
+USER QUESTION: {message}
+
+INSTRUCTIONS:
+1. Use the data above to answer. Be specific with numbers.
+2. If the question is about orders, check pending orders and value.
+3. If about money, check income/expenses/profit.
+4. If about inventory, check stock levels and low stock items.
+5. If about members, check availability and skills.
+6. Provide a clear, actionable recommendation.
+7. Include specific data points from the company data.
+
+Keep answers concise but data-driven.
+"""
+        else:
+            prompt = f"""
+You are an AI assistant for a cooperative business.
+Answer the following question based on your knowledge.
+
+Question: {message}
+
+Keep answers concise and actionable.
+"""
+        
+        # Route based on mode
         if self.mode == "local":
             if self.ollama_available:
                 return self._query_local(prompt)
