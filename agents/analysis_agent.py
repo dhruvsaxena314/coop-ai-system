@@ -17,10 +17,22 @@ class AnalysisAgent:
         for key, path in files.items():
             try:
                 if os.path.exists(path):
-                    data[key] = pd.read_csv(path)
+                    df = pd.read_csv(path)
+                    # Ensure numeric columns are correctly typed
+                    if key == 'finances':
+                        df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
+                    elif key == 'inventory':
+                        df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
+                        df['unit_price'] = pd.to_numeric(df['unit_price'], errors='coerce')
+                        df['reorder_level'] = pd.to_numeric(df['reorder_level'], errors='coerce')
+                    elif key == 'orders':
+                        df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
+                        df['total_value'] = pd.to_numeric(df['total_value'], errors='coerce')
+                    data[key] = df
                 else:
                     data[key] = pd.DataFrame()
-            except:
+            except Exception as e:
+                print(f"Error loading {key}: {e}")
                 data[key] = pd.DataFrame()
         return data
     
@@ -42,6 +54,9 @@ class AnalysisAgent:
         df = self.data['inventory']
         if df.empty:
             return None
+        # Ensure numeric conversion (already done in load, but safeguard)
+        df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
+        df['reorder_level'] = pd.to_numeric(df['reorder_level'], errors='coerce')
         low_stock = df[df['quantity'] < df['reorder_level']]
         return {
             'total_items': len(df),
@@ -65,6 +80,8 @@ class AnalysisAgent:
         df = self.data['orders']
         if df.empty:
             return None
+        # Ensure numeric conversion
+        df['total_value'] = pd.to_numeric(df['total_value'], errors='coerce')
         pending = df[df['status'] == 'pending']
         processing = df[df['status'] == 'processing']
         return {
@@ -87,15 +104,14 @@ class AnalysisAgent:
         }
     
     def analyze(self, question):
-        """Return structured analysis with CoT and references"""
-        # Gather all summaries
+        # Gather summaries
         finance = self.get_finance_summary()
         inventory = self.get_inventory_summary()
         members = self.get_member_summary()
         orders = self.get_order_summary()
         rules = self.get_rule_summary()
         
-        # Build concise context for AI
+        # Build context
         context_lines = []
         if finance:
             context_lines.append(f"FINANCES: Income Rs {finance['income']:,.0f}, Expenses Rs {finance['expenses']:,.0f}, Profit Rs {finance['profit']:,.0f}")
@@ -109,7 +125,7 @@ class AnalysisAgent:
             context_lines.append(f"RULES: {rules['total']} total, {rules['active']} active")
         context = "\n".join(context_lines)
         
-        # Generate insights (brief, data-driven)
+        # Generate insights
         insights = []
         references = []
         if orders and orders['pending'] > 0:
@@ -126,7 +142,7 @@ class AnalysisAgent:
             insights.append(f"Only {members['available']} of {members['total']} members available")
             references.append("members.csv → availability status")
         
-        # Chain-of-Thought summary
+        # Chain-of-Thought
         cot = []
         if 'order' in question.lower() or 'accept' in question.lower():
             if orders and orders['pending'] > 0:
@@ -149,7 +165,7 @@ class AnalysisAgent:
                 cot.append(f"- Orders in pipeline: {orders['total']}")
             if members:
                 cot.append(f"- Workforce: {members['available']} available")
-
+        
         return {
             "context": context,
             "insights": insights,
