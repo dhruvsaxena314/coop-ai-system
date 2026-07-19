@@ -1,6 +1,5 @@
 import networkx as nx
 import pandas as pd
-from pyvis.network import Network
 
 class KnowledgeGraphAgent:
     def __init__(self):
@@ -8,16 +7,18 @@ class KnowledgeGraphAgent:
         try:
             self.build_graph()
         except:
-            pass  # Fail silently if files missing
+            pass
     
     def build_graph(self):
         try:
+            # Load data
             finance = pd.read_csv("data/finances.csv")
             inventory = pd.read_csv("data/inventory.csv")
             members = pd.read_csv("data/members.csv")
             orders = pd.read_csv("data/orders.csv")
             rules = pd.read_csv("data/company_rules.csv")
             
+            # Add nodes and edges
             for _, row in finance.iterrows():
                 self.graph.add_node(row['category'], type='category')
             
@@ -39,30 +40,26 @@ class KnowledgeGraphAgent:
                 self.graph.add_node(row['rule_name'], type='rule')
                 self.graph.add_node(row['category'], type='category')
                 self.graph.add_edge(row['rule_name'], row['category'])
-        except:
-            pass
+        except Exception as e:
+            print(f"Error building graph: {e}")
     
     def get_connections(self, node):
         if node in self.graph:
             return list(self.graph.neighbors(node))
         return []
     
-    def visualize_graph(self):
-        net = Network(height="500px", width="100%", bgcolor="#1e2128", font_color="#ffffff")
+    def get_graph_data(self):
+        """Return graph data as dict for visualization"""
+        nodes = []
+        for node, attrs in self.graph.nodes(data=True):
+            nodes.append({
+                'id': node,
+                'type': attrs.get('type', 'unknown'),
+                'label': node
+            })
         
-        for node in self.graph.nodes():
-            node_type = self.graph.nodes[node].get('type', 'unknown')
-            colors = {
-                'category': '#ff6b6b',
-                'product': '#4ecdc4',
-                'member': '#45b7d1',
-                'role': '#96ceb4',
-                'customer': '#ffd93d',
-                'rule': '#6c5ce7'
-            }
-            net.add_node(node, label=node, color=colors.get(node_type, '#808080'))
+        edges = []
+        for u, v in self.graph.edges():
+            edges.append({'from': u, 'to': v})
         
-        for edge in self.graph.edges():
-            net.add_edge(edge[0], edge[1])
-        
-        return net
+        return {'nodes': nodes, 'edges': edges}

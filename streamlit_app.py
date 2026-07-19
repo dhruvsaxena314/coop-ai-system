@@ -268,37 +268,36 @@ with tab3:
         st.info("Make sure all CSV files exist in the data/ folder.")
 
 # ==================== TAB 4: Knowledge Graph ====================
+# In the knowledge graph tab:
 with tab4:
     st.markdown("<h3 style='color:#ffffff;'>🔗 Knowledge Graph</h3>", unsafe_allow_html=True)
 
     # Graph stats
     col1, col2, col3 = st.columns(3)
-    col1.metric("Nodes", len(kg.graph.nodes) if kg.graph else 0)
-    col2.metric("Edges", len(kg.graph.edges) if kg.graph else 0)
+    col1.metric("Nodes", len(kg.graph.nodes))
+    col2.metric("Edges", len(kg.graph.edges))
 
-    # Interactive graph
-    try:
-        if kg.graph and kg.graph.nodes:
-            net = kg.visualize_graph()
-            net.show("kg_visualization.html")
-            with open("kg_visualization.html", "r", encoding="utf-8") as f:
-                st.components.v1.html(f.read(), height=500)
-        else:
-            st.info("No data available for knowledge graph. Add data to see connections.")
-    except Exception as e:
-        st.error(f"Error displaying knowledge graph: {str(e)}")
-
-    # Query interface
-    st.markdown("<h4 style='color:#ffffff;'>Query Graph</h4>", unsafe_allow_html=True)
-    node_name = st.text_input("Enter node name to find connections:", placeholder="Example: Rajesh Kumar")
-    if node_name:
-        connections = kg.get_connections(node_name) if kg.graph else []
-        if connections:
-            st.write(f"**Connections for '{node_name}':**")
-            for conn in connections:
-                st.write(f"- {conn}")
-        else:
-            st.write(f"Node '{node_name}' not found or has no connections")
+    # Show graph data as JSON (simpler, always works)
+    graph_data = kg.get_graph_data()
+    
+    if graph_data['nodes']:
+        st.write(f"**Nodes:** {len(graph_data['nodes'])}")
+        st.write(f"**Edges:** {len(graph_data['edges'])}")
+        
+        # Show nodes table
+        nodes_df = pd.DataFrame(graph_data['nodes'])
+        st.dataframe(nodes_df, use_container_width=True)
+        
+        # Node type filter
+        if nodes_df['type'].nunique() > 0:
+            node_types = ['All'] + sorted(nodes_df['type'].unique().tolist())
+            selected_type = st.selectbox("Filter by type", node_types)
+            if selected_type != "All":
+                filtered = nodes_df[nodes_df['type'] == selected_type]
+                st.write(f"**Nodes of type '{selected_type}':** {len(filtered)}")
+                st.dataframe(filtered, use_container_width=True)
+    else:
+        st.info("No data available for knowledge graph.")
 
     # Node type filter
     node_types = []

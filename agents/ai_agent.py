@@ -1,6 +1,7 @@
 import requests
 import json
 import ollama
+import time
 from config import AIConfig
 
 class FlexibleAIAgent:
@@ -9,8 +10,10 @@ class FlexibleAIAgent:
         self.local_model = AIConfig.OLLAMA_MODEL
         self.ollama_url = AIConfig.OLLAMA_URL
         self.fallback = AIConfig.FALLBACK_TO_LOCAL
-        self.openrouter_key = AIConfig.OPENROUTER_API_KEY
-        self.openrouter_model = AIConfig.OPENROUTER_MODEL
+        
+        # Groq settings
+        self.groq_key = AIConfig.GROQ_API_KEY
+        self.groq_model = AIConfig.GROQ_MODEL
         
         self.ollama_available = self._check_ollama()
     
@@ -31,25 +34,32 @@ class FlexibleAIAgent:
         except Exception as e:
             return f"Local AI error: {str(e)}"
     
-    def _query_openrouter(self, prompt):
-        url = "https://openrouter.ai/api/v1/chat/completions"
+    def _query_groq(self, prompt):
+        if not self.groq_key:
+            return None
+        
+        url = "https://api.groq.com/openai/v1/chat/completions"
         headers = {
-            "Authorization": f"Bearer {self.openrouter_key}",
+            "Authorization": f"Bearer {self.groq_key}",
             "Content-Type": "application/json"
         }
         data = {
-            "model": self.openrouter_model,
+            "model": self.groq_model,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0.7,
             "max_tokens": 500
         }
         
         try:
-            response = requests.post(url, headers=headers, json=data, timeout=30)
+            response = requests.post(url, headers=headers, json=data, timeout=15)
             if response.status_code == 200:
                 return response.json()['choices'][0]['message']['content']
-            else:
-                return None
+            elif response.status_code == 429:
+                time.sleep(2)
+                response = requests.post(url, headers=headers, json=data, timeout=15)
+                if response.status_code == 200:
+                    return response.json()['choices'][0]['message']['content']
+            return None
         except:
             return None
     
@@ -69,22 +79,20 @@ class FlexibleAIAgent:
             return "Local AI not available. Please start Ollama or switch to web mode."
         
         elif self.mode == "web":
-            response = self._query_openrouter(prompt)
+            response = self._query_groq(prompt)
             if response:
                 return response
-            return "OpenRouter API error. Check your API key or internet connection."
+            if self.ollama_available:
+                return self._query_local(prompt)
+            return "Groq API error. Check your API key or internet connection."
         
         elif self.mode == "hybrid":
-            # Try OpenRouter first
-            response = self._query_openrouter(prompt)
+            response = self._query_groq(prompt)
             if response:
                 return response
-            
-            # Fallback to local
             if self.fallback and self.ollama_available:
                 return self._query_local(prompt)
-            
-            return "All AI services unavailable. Please check your configuration."
+            return "AI service unavailable. Please check your configuration."
         
         return "Invalid mode. Choose 'local', 'web', or 'hybrid'."
     
@@ -93,13 +101,12 @@ class FlexibleAIAgent:
             "mode": self.mode,
             "ollama_available": self.ollama_available,
             "local_model": self.local_model if self.ollama_available else "Not running",
-            "openrouter": "Configured" if self.openrouter_key else "Not configured",
-            "openrouter_model": self.openrouter_model
+            "groq": "Configured" if self.groq_key else "Not configured",
+            "groq_model": self.groq_model
         }
         return status
     
     def list_ollama_models(self):
-        """Get list of available Ollama models"""
         try:
             response = requests.get(f"{self.ollama_url}/api/tags", timeout=2)
             if response.status_code == 200:
@@ -110,13 +117,10 @@ class FlexibleAIAgent:
             return []
     
     def set_local_model(self, model_name):
-        """Change the local model"""
         self.local_model = model_name
-        # Save to env or config for persistence
         return {"status": "updated", "model": model_name}
     
     def set_mode(self, mode):
-        """Change the mode"""
         if mode in ['local', 'web', 'hybrid']:
             self.mode = mode
             return {"status": "updated", "mode": mode}

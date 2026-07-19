@@ -1,10 +1,11 @@
-from .finance_agent import FinanceAgent
-from .inventory_agent import InventoryAgent
-from .hr_agent import HRAgent
-from .logistics_agent import LogisticsAgent
-from .compliance_agent import ComplianceAgent
-from .company_rules_agent import CompanyRulesAgent
-from .govt_agent import GovtAgent
-from .ai_agent import FlexibleAIAgent
-from .analysis_agent import AnalysisAgent
-from .knowledge_graph_agent import KnowledgeGraphAgent
+def __init__(self):
+    self.mode = AIConfig.MODE
+    self.local_model = AIConfig.OLLAMA_MODEL
+    self.ollama_url = AIConfig.OLLAMA_URL
+    self.fallback = AIConfig.FALLBACK_TO_LOCAL
+    
+    # Groq settings
+    self.groq_key = AIConfig.GROQ_API_KEY
+    self.groq_model = AIConfig.GROQ_MODEL
+    
+    self.ollama_available = self._check_ollama()
