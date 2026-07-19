@@ -5,6 +5,7 @@ from orchestrator import Orchestrator
 from agents.ai_agent import FlexibleAIAgent
 from agents.analysis_agent import AnalysisAgent
 from agents.knowledge_graph_agent import KnowledgeGraphAgent
+from agents.external_agent import ExternalAgent
 from config import AIConfig
 from visualizer import Visualizer
 
@@ -35,6 +36,7 @@ orchestrator = Orchestrator()
 ai_agent = FlexibleAIAgent()
 analysis_agent = AnalysisAgent()
 kg = KnowledgeGraphAgent()
+ext = ExternalAgent()
 
 # Sidebar
 with st.sidebar:
@@ -67,6 +69,21 @@ with st.sidebar:
         </div>
     </div>
     """, unsafe_allow_html=True)
+    
+    # NEW: External data display in sidebar
+    with st.expander("🌐 Live Data", expanded=False):
+        cotton = ext.get_cotton_price()
+        weather = ext.get_weather()
+        exchange = ext.get_exchange_rate()
+        if cotton:
+            st.metric("Cotton Price", f"${cotton}")
+        if weather:
+            day1 = weather[0]
+            st.metric("Weather", f"{day1['main']['temp']}°C, {day1['weather'][0]['description']}")
+        if exchange:
+            st.metric("USD/INR", f"{exchange}")
+        if not cotton and not weather and not exchange:
+            st.info("No external data (check API keys)")
 
 st.markdown("<div class='main-header'>Co‑operative AI · Decision Intelligence</div>", unsafe_allow_html=True)
 
@@ -155,6 +172,13 @@ with tabs[2]:
         with col4:
             st.plotly_chart(Visualizer.plot_portfolio_distribution(fin), use_container_width=True)
         
+        # NEW: News section in dashboard
+        news = ext.get_news()
+        if news:
+            st.markdown("### 📰 Industry News")
+            for item in news[:3]:
+                st.write(f"- {item['title']} *({item['source']})*")
+        
         with st.expander("Raw data"):
             st.dataframe(fin)
     except Exception as e:
@@ -169,13 +193,11 @@ with tabs[3]:
             if kg._built and len(kg.graph.nodes) > 0:
                 net = kg.visualize()
                 if net:
-                    # Attempt to render interactive graph – fallback if fails
                     try:
                         net.show("kg.html")
                         with open("kg.html", "r", encoding="utf-8") as f:
                             st.components.v1.html(f.read(), height=500)
                     except Exception as e:
-                        # Fallback: show node/edge lists
                         st.warning("Interactive graph unavailable, displaying data instead.")
                         st.write(f"**Nodes ({len(kg.graph.nodes)})**: {list(kg.graph.nodes)[:20]}")
                         if len(kg.graph.nodes) > 20:
@@ -189,7 +211,6 @@ with tabs[3]:
                 st.info("No graph data available. Check CSV files.")
         except Exception as e:
             st.error(f"Graph error: {e}")
-            # Ultimate fallback
             if kg._built:
                 st.write(f"Nodes: {len(kg.graph.nodes)}")
                 st.write(f"Edges: {len(kg.graph.edges)}")

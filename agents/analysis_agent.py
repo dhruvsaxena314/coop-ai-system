@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from agents.external_agent import ExternalAgent
 
 class AnalysisAgent:
     def __init__(self):
@@ -18,7 +19,7 @@ class AnalysisAgent:
             try:
                 if os.path.exists(path):
                     df = pd.read_csv(path)
-                    # Ensure numeric columns are correctly typed
+                    # Ensure numeric columns
                     if key == 'finances':
                         df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
                     elif key == 'inventory':
@@ -54,7 +55,6 @@ class AnalysisAgent:
         df = self.data['inventory']
         if df.empty:
             return None
-        # Ensure numeric conversion (already done in load, but safeguard)
         df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
         df['reorder_level'] = pd.to_numeric(df['reorder_level'], errors='coerce')
         low_stock = df[df['quantity'] < df['reorder_level']]
@@ -80,7 +80,6 @@ class AnalysisAgent:
         df = self.data['orders']
         if df.empty:
             return None
-        # Ensure numeric conversion
         df['total_value'] = pd.to_numeric(df['total_value'], errors='coerce')
         pending = df[df['status'] == 'pending']
         processing = df[df['status'] == 'processing']
@@ -104,12 +103,19 @@ class AnalysisAgent:
         }
     
     def analyze(self, question):
-        # Gather summaries
+        # Internal summaries
         finance = self.get_finance_summary()
         inventory = self.get_inventory_summary()
         members = self.get_member_summary()
         orders = self.get_order_summary()
         rules = self.get_rule_summary()
+        
+        # External data
+        ext = ExternalAgent()
+        weather = ext.get_weather()
+        cotton_price = ext.get_cotton_price()
+        news = ext.get_news()
+        exchange_rate = ext.get_exchange_rate()
         
         # Build context
         context_lines = []
@@ -123,9 +129,22 @@ class AnalysisAgent:
             context_lines.append(f"ORDERS: {orders['total']} total, {orders['pending']} pending (Rs {orders['pending_value']:,.0f}), {orders['processing']} processing")
         if rules:
             context_lines.append(f"RULES: {rules['total']} total, {rules['active']} active")
+        
+        # External context
+        if cotton_price:
+            context_lines.append(f"COTTON PRICE: ${cotton_price} per pound")
+        if weather:
+            day1 = weather[0]
+            context_lines.append(f"WEATHER (next 3h): {day1['weather'][0]['description']}, {day1['main']['temp']}°C")
+        if exchange_rate:
+            context_lines.append(f"USD/INR: {exchange_rate}")
+        if news:
+            headlines = " | ".join([n["title"] for n in news[:2]])
+            context_lines.append(f"INDUSTRY NEWS: {headlines}")
+        
         context = "\n".join(context_lines)
         
-        # Generate insights
+        # Insights
         insights = []
         references = []
         if orders and orders['pending'] > 0:
@@ -142,6 +161,18 @@ class AnalysisAgent:
             insights.append(f"Only {members['available']} of {members['total']} members available")
             references.append("members.csv → availability status")
         
+        # External insights
+        if cotton_price and cotton_price is not None:
+            try:
+                if float(cotton_price) > 70:
+                    insights.append(f"⚠️ Cotton price is high (${cotton_price}) – consider sourcing alternatives")
+                    references.append("Alpha Vantage → cotton price")
+            except:
+                pass
+        if weather and weather[0]['weather'][0]['description'].lower().find('rain') != -1:
+            insights.append("🌧️ Rain forecast – prepare for delivery delays")
+            references.append("OpenWeatherMap → forecast")
+        
         # Chain-of-Thought
         cot = []
         if 'order' in question.lower() or 'accept' in question.lower():
@@ -153,8 +184,14 @@ class AnalysisAgent:
                 cot.append(f"Step 3: {members['available']} members are available, enough to handle extra work.")
             if finance and finance['profit'] > 10000:
                 cot.append(f"Step 4: Positive profit of Rs {finance['profit']:,.0f} suggests financial capacity.")
+            if cotton_price and cotton_price is not None:
+                try:
+                    if float(cotton_price) > 70:
+                        cot.append(f"Step 5: Cotton price is high (${cotton_price}) – factor in increased material cost.")
+                except:
+                    pass
             if cot:
-                cot.append("Conclusion: Based on data, the cooperative is capable of accepting new orders with caution on inventory.")
+                cot.append("Conclusion: Based on data, the cooperative is capable of accepting new orders with caution on inventory and external costs.")
             else:
                 cot.append("No clear data conflicts; decision should be based on specific order details.")
         else:
@@ -165,6 +202,8 @@ class AnalysisAgent:
                 cot.append(f"- Orders in pipeline: {orders['total']}")
             if members:
                 cot.append(f"- Workforce: {members['available']} available")
+            if cotton_price:
+                cot.append(f"- Cotton price: ${cotton_price}")
         
         return {
             "context": context,
