@@ -307,4 +307,4 @@ with tab4:
             st.write(filtered_nodes[:10])  # Show first 10
 
 st.markdown("---")
-st.markdown("<p style='color: #444444; font-size: 0.7rem; text-align: center;'>⚙️ AI Management System for Cooperatives and Cottage Industries</p>", unsafe_allow_html=True)s
+st.markdown("<p style='color: #444444; font-size: 0.7rem; text-align: center;'>⚙️ AI Management System for Cooperatives and Cottage Industries</p>", unsafe_allow_html=True)
