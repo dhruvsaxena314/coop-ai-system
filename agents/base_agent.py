@@ -19,7 +19,6 @@ class BaseAgent(ABC):
             try:
                 if os.path.exists(path):
                     df = pd.read_csv(path)
-                    # Type conversion
                     if key == 'finances':
                         df['amount'] = pd.to_numeric(df['amount'], errors='coerce')
                     elif key == 'inventory':
